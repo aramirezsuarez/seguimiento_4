@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ping Pong Score Keeper</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f8ff;
+      text-align: center;
+      padding: 30px;
+    }
+
+    h1 {
+      font-size: 2.5rem;
+      color: #333;
+      margin-bottom: 10px;
+    }
+
+    img {
+      width: 300px;
+      height: auto;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    #score {
+      font-size: 3rem;
+      font-weight: bold;
+      margin: 20px 0;
+      color: #2c3e50;
+    }
+
+    p {
+      font-size: 1.2rem;
+      color: #555;
+    }
+
+    select {
+      font-size: 1rem;
+      padding: 5px 10px;
+      margin-top: 10px;
+    }
+
+    .buttons {
+      margin-top: 20px;
+    }
+
+    .buttons button {
+      font-size: 1.1rem;
+      padding: 15px 25px;
+      margin: 0 10px;
+      cursor: pointer;
+      border: none;
+      border-radius: 8px;
+      background-color: #4caf50;
+      color: white;
+      transition: background-color 0.3s;
+    }
+
+    .buttons button:hover {
+      background-color: #45a049;
+    }
+
+    .buttons button.reset {
+      background-color: #e74c3c;
+    }
+
+    .buttons button.reset:hover {
+      background-color: #c0392b;
+    }
+
+    .winner {
+      color: green !important;
+    }
+
+    .loser {
+      color: red !important;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Ping Pong Score Keeper</h1>
+
+  <img src="https://media.istockphoto.com/id/1425158165/es/foto/ping-pong-de-ping-pong-de-mesa-y-pelota-blanca-sobre-tabla-azul.jpg?s=612x612&w=0&k=20&c=1U_oCZM85tf2GDwAxcrqcoSMenDsuvHvWVo88zkAMFs=" alt="Ping Pong Image">
+
+  <div id="score"><span id="p1Display">0</span> - <span id="p2Display">0</span></div>
+
+  <p>Use the buttons below to keep score</p>
+
+  <p>
+    Playing to:
+    <select id="playTo">
+      <script>
+        for (let i = 3; i <= 15; i++) {
+          document.write(`<option value="${i}">${i}</option>`);
+        }
+      </script>
+    </select>
+  </p>
+
+  <div class="buttons">
+    <button id="p1Btn">+1 Player One</button>
+    <button id="p2Btn">+1 Player Two</button>
+    <button id="resetBtn" class="reset">Reset</button>
+  </div>
+
+  <script>
+    let p1Score = 0;
+    let p2Score = 0;
+    let winningScore = 3;
+    let isGameOver = false;
+
+    const p1Display = document.getElementById("p1Display");
+    const p2Display = document.getElementById("p2Display");
+    const playToSelect = document.getElementById("playTo");
+    const p1Btn = document.getElementById("p1Btn");
+    const p2Btn = document.getElementById("p2Btn");
+    const resetBtn = document.getElementById("resetBtn");
+
+    playToSelect.addEventListener("change", function () {
+      winningScore = parseInt(this.value);
+      reset();
+    });
+
+    p1Btn.addEventListener("click", function () {
+      if (!isGameOver) {
+        p1Score++;
+        if (p1Score === winningScore) {
+          isGameOver = true;
+          p1Display.classList.add("winner");
+          p2Display.classList.add("loser");
+          disableButtons();
+        }
+        updateScore();
+      }
+    });
+
+    p2Btn.addEventListener("click", function () {
+      if (!isGameOver) {
+        p2Score++;
+        if (p2Score === winningScore) {
+          isGameOver = true;
+          p2Display.classList.add("winner");
+          p1Display.classList.add("loser");
+          disableButtons();
+        }
+        updateScore();
+      }
+    });
+
+    resetBtn.addEventListener("click", reset);
+
+    function updateScore() {
+      p1Display.textContent = p1Score;
+      p2Display.textContent = p2Score;
+    }
+
+    function reset() {
+      p1Score = 0;
+      p2Score = 0;
+      isGameOver = false;
+      updateScore();
+      p1Display.classList.remove("winner", "loser");
+      p2Display.classList.remove("winner", "loser");
+      enableButtons();
+    }
+
+    function disableButtons() {
+      p1Btn.disabled = true;
+      p2Btn.disabled = true;
+    }
+
+    function enableButtons() {
+      p1Btn.disabled = false;
+      p2Btn.disabled = false;
+    }
+  </script>
+
+</body>
+</html>
